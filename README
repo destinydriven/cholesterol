@@ -16,47 +16,47 @@ The demo source code can be found in http://github.com/rchavik/cholestorized
 
 For the impatient, use the following example as a starting point:
 
-<?php
-// controllers/users_controller.php
-class UsersController extends AppController {
-	// add Jqgrid component and helpers in your class variables.
-	var $components = array('Cholesterol.Jqgrid');
-	var $helpers = array('Cholesterol.Jqgrid');
+	<?php
+	// controllers/users_controller.php
+	class UsersController extends AppController {
+		// add Jqgrid component and helpers in your class variables.
+		var $components = array('Cholesterol.Jqgrid');
+		var $helpers = array('Cholesterol.Jqgrid');
+	
+		// controllers/users_controller.php - action that displays the grid
+		function list_users() {
+		}
+	
+		// Retrieve data for the grid in Json format
+		function get_list_users() {
+			// Perform the actual query using JqgridComponent and prepare
+			// the JSON response for the grid.
+			$this->Jqgrid->find('User');
+		}
+	?>
 
-	// controllers/users_controller.php - action that displays the grid
-	function list_users() {
+	<?php
+	// views/users/list_users.ctp
+	echo $jqgrid->grid('user');
+	
+	// Minimal configuration required to setup jqgrid initialization
+	// The format of $options array follows jqgrid configuration
+	// NOTE: javascript blocks (eg: for event handling) needs to be enclosed
+	// with <script> and </script>
+	// If anyone has better solution for this, please let me know
+	echo $jqgrid->script('user', array(
+		'url' => '/users/get_list_users.json',
+		'loadComplete' => '
+	<script>
+	function() {
+	        alert("Your grid has been loaded successfully");
 	}
-
-	// Retrieve data for the grid in Json format
-	function get_list_users() {
-		// Perform the actual query using JqgridComponent and prepare
-		// the JSON response for the grid.
-		$this->Jqgrid->find('User');
-	}
-?>
-
-<?php
-// views/users/list_users.ctp
-echo $jqgrid->grid('user');
-
-// Minimal configuration required to setup jqgrid initialization
-// The format of $options array follows jqgrid configuration
-// NOTE: javascript blocks (eg: for event handling) needs to be enclosed
-// with <script> and </script>
-// If anyone has better solution for this, please let me know
-echo $jqgrid->script('user', array(
-	'url' => '/users/get_list_users.json',
-	'loadComplete' => '
-<script>
-function() {
-        alert("Your grid has been loaded successfully");
-}
-</script>
-'
-	)
-);
-
-?>
+	</script>
+	'
+		)
+	);
+	
+	?>
 
 Note: I still consider this plugin as very unstable.
 
